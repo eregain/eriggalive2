@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
-import { useTheme } from "@/contexts/theme-context"
+import { useTheme } from "next-themes"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Music, Video, Newspaper, Users, ShoppingBag, Calendar } from "lucide-react"
@@ -12,11 +12,13 @@ import { getOptimizedVideoSources } from "@/utils/video-utils"
 import EriggaRadio from "@/components/erigga-radio"
 
 export default function HomePage() {
-  const { theme } = useTheme()
+  const { theme, resolvedTheme } = useTheme()
   const [currentSlide, setCurrentSlide] = useState(0)
   const [mounted, setMounted] = useState(false)
   const videoSources = getOptimizedVideoSources()
-  const primaryVideoUrl = videoSources[0]?.src || "/videoshttps://hebbkx1anhila5yf.public.blob.vercel-storage.com/git-blob/prj_87iLY6t51DXvy0yPJ00SYhwlKXWl/K6Q-Lit6vuzvhNfoGXuTFB/public/erigga-hero-video.mp4"
+  const primaryVideoUrl =
+    videoSources[0]?.src ||
+    "/videoshttps://hebbkx1anhila5yf.public.blob.vercel-storage.com/git-blob/prj_87iLY6t51DXvy0yPJ00SYhwlKXWl/K6Q-Lit6vuzvhNfoGXuTFB/public/erigga-hero-video.mp4"
 
   // Hero images
   const heroImages = [
@@ -191,7 +193,7 @@ export default function HomePage() {
                   className={cn(
                     "transition-all duration-300 font-bold rounded-lg py-3 px-8 text-center shadow-lg",
                     "transform hover:scale-105 hover:shadow-xl",
-                    theme === "dark"
+                    resolvedTheme === "dark"
                       ? "bg-white text-harkonnen-black hover:bg-gray-200"
                       : "bg-brand-lime text-brand-teal hover:bg-brand-lime-dark",
                   )}
@@ -204,7 +206,7 @@ export default function HomePage() {
                   className={cn(
                     "transition-all duration-300 font-bold rounded-lg py-3 px-8 text-center shadow-lg",
                     "transform hover:scale-105 hover:shadow-xl",
-                    theme === "dark"
+                    resolvedTheme === "dark"
                       ? "bg-transparent border-2 border-white text-white hover:bg-white/10"
                       : "bg-brand-teal text-white hover:bg-brand-teal-dark",
                   )}
@@ -275,7 +277,7 @@ export default function HomePage() {
                 <Card
                   className={cn(
                     "h-full transition-all duration-300 hover:scale-105 overflow-hidden",
-                    theme === "dark" ? "harkonnen-card" : "border border-gray-200",
+                    resolvedTheme === "dark" ? "harkonnen-card" : "border border-gray-200",
                   )}
                 >
                   <CardContent className="p-6 flex flex-col h-full">
@@ -285,7 +287,7 @@ export default function HomePage() {
                         feature.color,
                       )}
                     >
-                      <feature.icon className={cn("h-6 w-6", theme === "dark" ? "text-black" : "text-white")} />
+                      <feature.icon className={cn("h-6 w-6", resolvedTheme === "dark" ? "text-black" : "text-white")} />
                     </div>
                     <h3 className="text-xl font-bold mb-2">{feature.title}</h3>
                     <p className="text-muted-foreground flex-grow">{feature.description}</p>
@@ -323,7 +325,7 @@ export default function HomePage() {
             {testimonials.map((testimonial, index) => (
               <Card
                 key={index}
-                className={cn("h-full", theme === "dark" ? "harkonnen-card" : "border border-gray-200")}
+                className={cn("h-full", resolvedTheme === "dark" ? "harkonnen-card" : "border border-gray-200")}
               >
                 <CardContent className="p-6 flex flex-col h-full">
                   <div className="mb-4">
@@ -375,7 +377,7 @@ export default function HomePage() {
                     "h-full border-2 transition-all duration-300",
                     plan.color,
                     plan.popular ? "transform scale-105" : "",
-                    theme === "dark" ? "harkonnen-card" : "",
+                    resolvedTheme === "dark" ? "harkonnen-card" : "",
                   )}
                 >
                   <CardContent className={cn("p-6", plan.bgColor)}>
@@ -440,7 +442,7 @@ export default function HomePage() {
               className={cn(
                 "transition-all duration-300 font-bold rounded-lg py-3 px-8 text-center shadow-lg",
                 "transform hover:scale-105 hover:shadow-xl",
-                theme === "dark"
+                resolvedTheme === "dark"
                   ? "bg-white text-harkonnen-black hover:bg-gray-200"
                   : "bg-brand-lime text-brand-teal hover:bg-brand-lime-dark",
               )}
