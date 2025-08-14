@@ -1,7 +1,20 @@
-import { createServerClient } from '@supabase/ssr'
-import { NextResponse, type NextRequest } from 'next/server'
+import { createServerClient } from "@supabase/ssr"
+import { NextResponse, type NextRequest } from "next/server"
+
+const isSupabaseConfigured =
+  typeof process.env.NEXT_PUBLIC_SUPABASE_URL === "string" &&
+  process.env.NEXT_PUBLIC_SUPABASE_URL.length > 0 &&
+  typeof process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY === "string" &&
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY.length > 0
 
 export async function updateSession(request: NextRequest) {
+  if (!isSupabaseConfigured) {
+    console.warn("Supabase environment variables are not properly configured")
+    return NextResponse.next({
+      request,
+    })
+  }
+
   let supabaseResponse = NextResponse.next({
     request,
   })
@@ -19,12 +32,10 @@ export async function updateSession(request: NextRequest) {
           supabaseResponse = NextResponse.next({
             request,
           })
-          cookiesToSet.forEach(({ name, value, options }) =>
-            supabaseResponse.cookies.set(name, value, options)
-          )
+          cookiesToSet.forEach(({ name, value, options }) => supabaseResponse.cookies.set(name, value, options))
         },
       },
-    }
+    },
   )
 
   // IMPORTANT: Avoid writing any logic between createServerClient and
@@ -38,18 +49,18 @@ export async function updateSession(request: NextRequest) {
     } = await supabase.auth.getUser()
 
     // Only log actual errors, not missing sessions
-    if (error && !error.message.includes('Auth session missing')) {
-      console.error('Auth error in middleware:', error.message)
+    if (error && !error.message.includes("Auth session missing")) {
+      console.error("Auth error in middleware:", error.message)
     }
 
     // Allow all requests to continue - we'll handle auth at the component level
     return supabaseResponse
   } catch (error: any) {
     // Only log unexpected errors
-    if (!error.message?.includes('Auth session missing')) {
-      console.error('Unexpected auth error in middleware:', error)
+    if (!error.message?.includes("Auth session missing")) {
+      console.error("Unexpected auth error in middleware:", error)
     }
-    
+
     // Always allow the request to continue
     return supabaseResponse
   }
